@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ray Game</title>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .gameContainer {
+            background-color: transparent;
+            height: 200px;
+            width: 500px;
+            border: 2px solid black;
+            background-image: url("https://i.pinimg.com/736x/da/24/d1/da24d13a006d715c212dbdfc3811a028.jpg");
+            background-size: cover;
+            background-repeat: repeat-x;
+        }
+
+        .ray{
+            height: 50px;
+            width: 30px;
+            position: relative;
+            top: 150px;
+            background-image: url("https://image.pngaaa.com/6/99006-middle.png");
+            background-position: center;
+            background-size: 40px 62px;
+        }
+
+        .jump {
+            animation: jump 0.5s ease-in-out;
+        }
+
+        @keyframes jump {
+            50% {
+                top: 100px;
+            }
+        }
+
+        .block {
+            height: 20px;
+            width: 20px;
+            top: 129px;
+            left: 480px;
+            background-image: url("https://w7.pngwing.com/pngs/606/496/png-transparent-blue-dinosaur-jurassic-cartoon-dinosaur-ancient-biological-thumbnail.png");
+            background-size: 20px;
+            background-repeat: no-repeat;
+            position: relative;
+            animation: move 4s linear infinite;
+        }
+
+        @keyframes move {
+            0% {
+                left: 480px;
+            }
+
+            100% {
+                left: -30px;
+            }
+        }
+
+        #score {
+            position: fixed;
+            top: 10px;
+            left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="gameContainer">
+        <div class="ray" onclick="addJump()"></div>
+        <div class="block"></div>
+    </div>
+    <div id="score">0</div>
+    <script>
+        let score = 0;
+        
+        function addJump() {
+            let mario = document.getElementsByClassName("ray")[0];
+            if (mario.getAttribute("class") == "ray") {
+                mario.setAttribute("class", "ray jump");
+                setTimeout(() => {
+                    mario.setAttribute("class", "ray");
+                }, 500);
+            }
+        }
+
+        let gameOver = setInterval(function () {
+            let ray = document.getElementsByClassName("ray")[0];
+            let block = document.getElementsByClassName("block")[0];
+
+            let scoreDiv = document.getElementById("score");
+            scoreDiv.innerHTML = 'Score: ' + score;
+
+            let marioDimension = parseInt(
+                window.getComputedStyle(ray).getPropertyValue("top")
+            );
+            let blockDimension = parseInt(
+                window.getComputedStyle(block).getPropertyValue("left")
+            );
+
+            if (
+                blockDimension > 0 &&
+                blockDimension < 20 &&
+                marioDimension >= 120
+            ) {
+                clearInterval(gameOver);
+                alert("GAME OVER. Your Score: " + score);
+                score = 0; // Reset the score to zero
+                scoreDiv.innerHTML = 'Score: ' + score;
+            }
+            
+            score++;
+        }, 100);
+    </script>
+</body>
+
+</html>
